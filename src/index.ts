@@ -4,10 +4,12 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
-import { router } from "./routes/projectroutes.js";
-
+import projectroutes from "./routes/projectroutes.js";
+import tasksroutes from "./routes/tasksroutes.js";
+import { Router } from "express";
 dotenv.config();
 const app = express();
+
 
 app.use(express.json());
 app.use(helmet());
@@ -22,9 +24,12 @@ app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-app.use("/projects", router);
+app.use("/projects", projectroutes);
+app.use("/tasks",tasksroutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+

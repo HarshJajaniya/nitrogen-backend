@@ -1,5 +1,6 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.disableAutomaticTypeAcquisition": true,
-  "typescript.tsserver.experimental.useProjectSystem": true
+  "typescript.tsserver.experimental.useProjectSystem": true,
+  "prisma.pinToPrisma6": false
 }
