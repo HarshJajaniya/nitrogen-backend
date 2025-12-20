@@ -7,6 +7,8 @@ import helmet from "helmet";
 import projectroutes from "./routes/projectroutes.js";
 import tasksroutes from "./routes/tasksroutes.js";
 import { Router } from "express";
+import searchroutes from "./routes/seacrhroutes.js";
+import userroutes from "./routes/userroutes.js";
 dotenv.config();
 const app = express();
 
@@ -26,7 +28,8 @@ app.get("/", (req, res) => {
 
 app.use("/projects", projectroutes);
 app.use("/tasks",tasksroutes);
-
+app.use("/search",searchroutes);
+app.use("/users",userroutes);
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
