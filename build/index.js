@@ -8,6 +8,7 @@ import projectroutes from "./routes/projectroutes.js";
 import tasksroutes from "./routes/tasksroutes.js";
 import searchroutes from "./routes/seacrhroutes.js";
 import userroutes from "./routes/userroutes.js";
+import teamroutes from "./routes/teamroutes.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -25,6 +26,7 @@ app.use("/projects", projectroutes);
 app.use("/tasks", tasksroutes);
 app.use("/search", searchroutes);
 app.use("/users", userroutes);
+app.use("/teams", teamroutes);
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
