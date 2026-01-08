@@ -9,7 +9,7 @@ import tasksroutes from "./routes/tasksroutes.js";
 import searchroutes from "./routes/seacrhroutes.js";
 import userroutes from "./routes/userroutes.js";
 import teamroutes from "./routes/teamroutes.js";
-import { PrismaClient } from "@prisma/client";
+
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -21,9 +21,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 // ROUTES
 app.get("/", (req, res) => {
-    res.send("API is running...");
+  res.send("API is running...");
 });
-const prisma = new PrismaClient();
+
 app.use("/projects", projectroutes);
 app.use("/tasks", tasksroutes);
 app.use("/search", searchroutes);
@@ -31,5 +31,5 @@ app.use("/users", userroutes);
 app.use("/teams", teamroutes);
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
