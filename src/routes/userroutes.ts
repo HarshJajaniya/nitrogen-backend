@@ -1,9 +1,10 @@
 import { Router } from "express";
 
-import { getUsers, postUser } from "../controllers/userController.js";
+import { getUsers, postUser ,getUser} from "../controllers/userController.js";
 
 const tasksroutes = Router();
 
 tasksroutes.get("/", getUsers);
 tasksroutes.post("/", postUser);
+tasksroutes.get("/:cognitoId", getUser);
 export default tasksroutes;
