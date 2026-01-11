@@ -9,19 +9,22 @@ export const getProjects = async (req, res) => {
     }
 };
 export const createProjects = async (req, res) => {
-    const { name, description, startDate, endDate } = req.body;
     try {
-        const newproject = await prisma.project.create({
+        const { name, description, startDate, endDate } = req.body;
+        const newProject = await prisma.project.create({
             data: {
                 name,
                 description,
-                startDate,
-                endDate
-            }
+                startDate: startDate ? new Date(startDate) : null,
+                endDate: endDate ? new Date(endDate) : null,
+            },
         });
-        res.status(201).json(newproject);
+        res.status(201).json(newProject);
     }
     catch (error) {
-        res.status(500).json({ message: `Failed to create project: ${error.message}` });
+        console.error("CREATE PROJECT ERROR:", error);
+        res.status(500).json({
+            message: error.message,
+        });
     }
 };
