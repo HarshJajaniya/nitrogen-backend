@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
-import {prisma }from "../lib/prisma.js";
+import { prisma } from "../prisma.js";
+
 
 export const search = async (req: Request, res: Response): Promise<void> => {
     const { query } = req.query;

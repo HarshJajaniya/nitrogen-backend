@@ -1,4 +1,4 @@
-import { prisma } from "../lib/prisma.js";
+import { prisma } from "../prisma.js";
 export const getTeams = async (req, res) => {
     try {
         const teams = await prisma.team.findMany();

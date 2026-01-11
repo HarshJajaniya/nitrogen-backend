@@ -1,17 +1,21 @@
+import "./prisma.js"; // 👈 REQUIRED: initialize Prisma once
 import express from "express";
 import dotenv from "dotenv";
+dotenv.config();
 import bodyParser from "body-parser";
 import cors from "cors";
-import morgan from "morgan";
 import helmet from "helmet";
-import projectroutes from "./routes/projectroutes.js";
-import tasksroutes from "./routes/tasksroutes.js";
-import searchroutes from "./routes/seacrhroutes.js";
-import userroutes from "./routes/userroutes.js";
-import teamroutes from "./routes/teamroutes.js";
-
+import morgan from "morgan";
+/* ROUTE IMPORTS */
+import projectRoutes from "./routes/projectroutes.js";
+import taskRoutes from "./routes/tasksroutes.js";
+import searchRoutes from "./routes/seacrhroutes.js";
+import userRoutes from "./routes/userroutes.js";
+import teamRoutes from "./routes/teamroutes.js";
+/* CONFIG */
 dotenv.config();
 const app = express();
+/* MIDDLEWARE */
 app.use(express.json());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
@@ -19,17 +23,17 @@ app.use(morgan("common"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
-// ROUTES
+/* ROUTES */
 app.get("/", (req, res) => {
-  res.send("API is running...");
+    res.send("API is running...");
 });
-
-app.use("/projects", projectroutes);
-app.use("/tasks", tasksroutes);
-app.use("/search", searchroutes);
-app.use("/users", userroutes);
-app.use("/teams", teamroutes);
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.use("/projects", projectRoutes);
+app.use("/tasks", taskRoutes);
+app.use("/search", searchRoutes);
+app.use("/users", userRoutes);
+app.use("/teams", teamRoutes);
+/* SERVER */
+const port = Number(process.env.PORT) || 3000;
+app.listen(port, "0.0.0.0", () => {
+    console.log(`Server running on port ${port}`);
 });

@@ -1,4 +1,4 @@
-import { prisma } from "../lib/prisma.js";
+import { prisma } from "../prisma.js";
 export const getTasks = async (req, res) => {
     const { projectId } = req.query;
     try {

@@ -1,4 +1,4 @@
-import { prisma } from "../lib/prisma.js";
+import { prisma } from "../prisma.js";
 export const search = async (req, res) => {
     const { query } = req.query;
     try {
