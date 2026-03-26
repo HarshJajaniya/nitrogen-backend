@@ -27,6 +27,9 @@ app.use(cors());
 app.get("/", (req, res) => {
     res.send("API is running...");
 });
+app.get("/api/test", (req, res) => {
+    res.json({ message: "API working 🚀" });
+});
 app.get("/favicon.ico", (req, res) => {
     res.status(204).end();
 });
