@@ -4,7 +4,7 @@ import express from "express";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import cors from "cors";
-import helmet from "helmet";
+import { createRequire } from "module";
 import morgan from "morgan";
 
 /* ROUTE IMPORTS */
@@ -15,6 +15,9 @@ import userRoutes from "./routes/userroutes.js";
 import teamRoutes from "./routes/teamroutes.js";
 
 dotenv.config();
+
+const require = createRequire(import.meta.url);
+const helmet = require("helmet");
 
 const app = express();
 
@@ -29,7 +32,7 @@ app.use(cors());
 
 /* ROUTES */
 app.get("/", (req, res) => {
-  res.send("API is running...");
+    res.send("API is running...");
 });
 
 app.use("/projects", projectRoutes);
