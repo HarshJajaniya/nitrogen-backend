@@ -1,12 +1,12 @@
-import { supabaseAnonKey, supabaseUrl } from "../../../../lib/supabase";
+import { supabaseServiceRoleKey, supabaseUrl } from "../../../../lib/supabase";
 
 export async function GET() {
     try {
         const response = await fetch(`${supabaseUrl}/auth/v1/health`, {
             method: "GET",
             headers: {
-                apikey: supabaseAnonKey,
-                Authorization: `Bearer ${supabaseAnonKey}`,
+                apikey: supabaseServiceRoleKey!,
+                Authorization: `Bearer ${supabaseServiceRoleKey!}`,
             },
             cache: "no-store",
         });
