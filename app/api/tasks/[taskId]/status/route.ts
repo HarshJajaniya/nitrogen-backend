@@ -1,10 +1,11 @@
-import { supabaseAdmin } from "../../../../../lib/supabaseAdmin";
+import { getSupabaseAdmin } from "../../../../../lib/supabaseAdmin";
 
 export async function PATCH(
     request: Request,
     { params }: { params: Promise<{ taskId: string }> }
 ) {
     try {
+        const supabaseAdmin = getSupabaseAdmin();
         const { taskId } = await params;
         const body = await request.json();
         const { status } = body;

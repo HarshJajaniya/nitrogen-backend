@@ -1,12 +1,5 @@
 {
   "pages": {
-    "/api/projects/route": [
-      "static/chunks/webpack-253a3133fbb58aa6.js",
-      "static/chunks/4bd1b696-21f374d1156f834a.js",
-      "static/chunks/58-c739f81f289d9898.js",
-      "static/chunks/main-app-c1532ef50aa77d54.js",
-      "static/chunks/app/api/projects/route-36ed5c94cef40737.js"
-    ],
     "/api/search/route": [
       "static/chunks/webpack-253a3133fbb58aa6.js",
       "static/chunks/4bd1b696-21f374d1156f834a.js",
@@ -14,19 +7,12 @@
       "static/chunks/main-app-c1532ef50aa77d54.js",
       "static/chunks/app/api/search/route-36ed5c94cef40737.js"
     ],
-    "/api/tasks/[taskId]/status/route": [
+    "/api/projects/route": [
       "static/chunks/webpack-253a3133fbb58aa6.js",
       "static/chunks/4bd1b696-21f374d1156f834a.js",
       "static/chunks/58-c739f81f289d9898.js",
       "static/chunks/main-app-c1532ef50aa77d54.js",
-      "static/chunks/app/api/tasks/[taskId]/status/route-36ed5c94cef40737.js"
-    ],
-    "/api/tasks/user/[userId]/route": [
-      "static/chunks/webpack-253a3133fbb58aa6.js",
-      "static/chunks/4bd1b696-21f374d1156f834a.js",
-      "static/chunks/58-c739f81f289d9898.js",
-      "static/chunks/main-app-c1532ef50aa77d54.js",
-      "static/chunks/app/api/tasks/user/[userId]/route-36ed5c94cef40737.js"
+      "static/chunks/app/api/projects/route-36ed5c94cef40737.js"
     ],
     "/api/tasks/route": [
       "static/chunks/webpack-253a3133fbb58aa6.js",
@@ -35,6 +21,13 @@
       "static/chunks/main-app-c1532ef50aa77d54.js",
       "static/chunks/app/api/tasks/route-36ed5c94cef40737.js"
     ],
+    "/api/tasks/[taskId]/status/route": [
+      "static/chunks/webpack-253a3133fbb58aa6.js",
+      "static/chunks/4bd1b696-21f374d1156f834a.js",
+      "static/chunks/58-c739f81f289d9898.js",
+      "static/chunks/main-app-c1532ef50aa77d54.js",
+      "static/chunks/app/api/tasks/[taskId]/status/route-36ed5c94cef40737.js"
+    ],
     "/api/teams/route": [
       "static/chunks/webpack-253a3133fbb58aa6.js",
       "static/chunks/4bd1b696-21f374d1156f834a.js",
@@ -42,12 +35,12 @@
       "static/chunks/main-app-c1532ef50aa77d54.js",
       "static/chunks/app/api/teams/route-36ed5c94cef40737.js"
     ],
-    "/api/users/[cognitoId]/route": [
+    "/api/tasks/user/[userId]/route": [
       "static/chunks/webpack-253a3133fbb58aa6.js",
       "static/chunks/4bd1b696-21f374d1156f834a.js",
       "static/chunks/58-c739f81f289d9898.js",
       "static/chunks/main-app-c1532ef50aa77d54.js",
-      "static/chunks/app/api/users/[cognitoId]/route-36ed5c94cef40737.js"
+      "static/chunks/app/api/tasks/user/[userId]/route-36ed5c94cef40737.js"
     ],
     "/api/test/route": [
       "static/chunks/webpack-253a3133fbb58aa6.js",
@@ -56,12 +49,12 @@
       "static/chunks/main-app-c1532ef50aa77d54.js",
       "static/chunks/app/api/test/route-36ed5c94cef40737.js"
     ],
-    "/api/test/supabase/route": [
+    "/api/users/[cognitoId]/route": [
       "static/chunks/webpack-253a3133fbb58aa6.js",
       "static/chunks/4bd1b696-21f374d1156f834a.js",
       "static/chunks/58-c739f81f289d9898.js",
       "static/chunks/main-app-c1532ef50aa77d54.js",
-      "static/chunks/app/api/test/supabase/route-36ed5c94cef40737.js"
+      "static/chunks/app/api/users/[cognitoId]/route-36ed5c94cef40737.js"
     ],
     "/api/users/route": [
       "static/chunks/webpack-253a3133fbb58aa6.js",
@@ -69,6 +62,13 @@
       "static/chunks/58-c739f81f289d9898.js",
       "static/chunks/main-app-c1532ef50aa77d54.js",
       "static/chunks/app/api/users/route-36ed5c94cef40737.js"
+    ],
+    "/api/test/supabase/route": [
+      "static/chunks/webpack-253a3133fbb58aa6.js",
+      "static/chunks/4bd1b696-21f374d1156f834a.js",
+      "static/chunks/58-c739f81f289d9898.js",
+      "static/chunks/main-app-c1532ef50aa77d54.js",
+      "static/chunks/app/api/test/supabase/route-36ed5c94cef40737.js"
     ]
   }
 }

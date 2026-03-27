@@ -1,7 +1,8 @@
-import { supabaseAdmin } from "../../../lib/supabaseAdmin";
+import { getSupabaseAdmin } from "../../../lib/supabaseAdmin";
 
 export async function GET() {
     try {
+        const supabaseAdmin = getSupabaseAdmin();
         const { data, error } = await supabaseAdmin.from("User").select("*");
         if (error) throw error;
 
@@ -17,6 +18,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
     try {
+        const supabaseAdmin = getSupabaseAdmin();
         const body = await request.json();
         const {
             username,

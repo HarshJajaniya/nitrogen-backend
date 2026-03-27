@@ -1,7 +1,8 @@
-import { supabaseAdmin } from "../lib/supabaseAdmin";
+import { getSupabaseAdmin } from "../lib/supabaseAdmin";
 
 export default async function handler(req: any, res: any) {
     try {
+        const supabaseAdmin = getSupabaseAdmin();
         const { data, error } = await supabaseAdmin.from("users").select("*");
 
         if (error) throw error;

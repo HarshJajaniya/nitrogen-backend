@@ -1,29 +1,19 @@
-import { supabaseServiceRoleKey, supabaseUrl } from "../../../../lib/supabase";
+import { getSupabase } from "../../../../lib/supabase";
 
 export async function GET() {
     try {
-        const response = await fetch(`${supabaseUrl}/auth/v1/health`, {
-            method: "GET",
-            headers: {
-                apikey: supabaseServiceRoleKey!,
-                Authorization: `Bearer ${supabaseServiceRoleKey!}`,
-            },
-            cache: "no-store",
-        });
+        const supabase = getSupabase();
+        const { data, error } = await supabase.from("test").select("*");
 
-        const body = await response.text();
+        if (error) throw error;
 
         return Response.json(
             {
-                connected: response.ok,
-                status: response.status,
-                statusText: response.statusText,
-                message: response.ok
-                    ? "Supabase connection successful"
-                    : "Supabase responded, but check URL/key validity",
-                body,
+                connected: true,
+                message: "Supabase connection successful",
+                data,
             },
-            { status: response.ok ? 200 : 502 }
+            { status: 200 }
         );
     } catch (error: any) {
         return Response.json(

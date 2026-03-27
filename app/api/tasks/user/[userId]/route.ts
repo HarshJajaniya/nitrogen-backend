@@ -1,10 +1,11 @@
-import { supabaseAdmin } from "../../../../../lib/supabaseAdmin";
+import { getSupabaseAdmin } from "../../../../../lib/supabaseAdmin";
 
 export async function GET(
     _request: Request,
     { params }: { params: Promise<{ userId: string }> }
 ) {
     try {
+        const supabaseAdmin = getSupabaseAdmin();
         const { userId } = await params;
         const numericUserId = Number(userId);
         const { data: tasksData, error: tasksError } = await supabaseAdmin

@@ -1,10 +1,11 @@
-import { supabaseAdmin } from "../../../lib/supabaseAdmin";
+import { getSupabaseAdmin } from "../../../lib/supabaseAdmin";
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const projectId = searchParams.get("projectId");
 
     try {
+        const supabaseAdmin = getSupabaseAdmin();
         const numericProjectId = Number(projectId);
         const query = supabaseAdmin.from("Task").select("*");
         const { data: tasksData, error: tasksError } = Number.isFinite(numericProjectId)
@@ -72,6 +73,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
     try {
+        const supabaseAdmin = getSupabaseAdmin();
         const body = await request.json();
         const {
             title,

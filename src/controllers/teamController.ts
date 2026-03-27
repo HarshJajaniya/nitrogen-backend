@@ -1,9 +1,10 @@
 import type { Request, Response } from "express";
-import { supabase } from "../supabase.js";
+import { getSupabase } from "../supabase.js";
 
 
 export const getTeams = async (req: Request, res: Response): Promise<void> => {
   try {
+    const supabase = getSupabase();
     const { data: teamsData, error: teamsError } = await supabase
       .from("Team")
       .select("*");

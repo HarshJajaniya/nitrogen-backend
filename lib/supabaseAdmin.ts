@@ -4,7 +4,7 @@ type SupabaseClient = any;
 
 let cachedAdminClient: SupabaseClient | null = null;
 
-const getSupabaseAdminClient = (): SupabaseClient => {
+export const getSupabaseAdmin = (): SupabaseClient => {
     if (cachedAdminClient) return cachedAdminClient;
 
     const supabaseUrl =
@@ -26,11 +26,3 @@ const getSupabaseAdminClient = (): SupabaseClient => {
 
     return cachedAdminClient;
 };
-
-export const supabaseAdmin = new Proxy({} as SupabaseClient, {
-    get(_target, prop) {
-        const client = getSupabaseAdminClient() as any;
-        const value = client[prop];
-        return typeof value === "function" ? value.bind(client) : value;
-    },
-});

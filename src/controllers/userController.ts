@@ -1,10 +1,11 @@
 import type { Request, Response } from "express";
-import { supabase } from "../supabase.js";
+import { getSupabase } from "../supabase.js";
 
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
   const { projectId } = req.query;
   try {
+    const supabase = getSupabase();
     const { data, error } = await supabase.from("User").select("*");
     if (error) throw error;
 
@@ -26,6 +27,7 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
   }
 
   try {
+    const supabase = getSupabase();
     const { data: user, error } = await supabase
       .from("User")
       .select("*")
@@ -42,6 +44,7 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
 
 export const postUser = async (req: Request, res: Response) => {
   try {
+    const supabase = getSupabase();
     const {
       username,
       cognitoId,

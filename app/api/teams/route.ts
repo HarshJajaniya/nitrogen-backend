@@ -1,7 +1,8 @@
-import { supabaseAdmin } from "../../../lib/supabaseAdmin";
+import { getSupabaseAdmin } from "../../../lib/supabaseAdmin";
 
 export async function GET() {
     try {
+        const supabaseAdmin = getSupabaseAdmin();
         const { data: teamsData, error: teamsError } = await supabaseAdmin
             .from("Team")
             .select("*");

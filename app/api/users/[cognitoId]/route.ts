@@ -1,10 +1,11 @@
-import { supabaseAdmin } from "../../../../lib/supabaseAdmin";
+import { getSupabaseAdmin } from "../../../../lib/supabaseAdmin";
 
 export async function GET(
     _request: Request,
     { params }: { params: Promise<{ cognitoId: string }> }
 ) {
     try {
+        const supabaseAdmin = getSupabaseAdmin();
         const { cognitoId } = await params;
         const { data: user, error } = await supabaseAdmin
             .from("User")

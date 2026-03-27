@@ -1,10 +1,11 @@
-import { supabaseAdmin } from "../../../lib/supabaseAdmin";
+import { getSupabaseAdmin } from "../../../lib/supabaseAdmin";
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get("query") ?? "";
 
     try {
+        const supabaseAdmin = getSupabaseAdmin();
         const queryText = String(query).trim();
         const pattern = `%${queryText}%`;
 

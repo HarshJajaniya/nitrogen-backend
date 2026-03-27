@@ -1,10 +1,11 @@
 import type { Request, Response } from "express";
-import { supabase } from "../supabase.js";
+import { getSupabase } from "../supabase.js";
 
 
 export const search = async (req: Request, res: Response): Promise<void> => {
     const { query } = req.query;
     try {
+        const supabase = getSupabase();
         const queryText = String(query ?? "").trim();
         const pattern = `%${queryText}%`;
 

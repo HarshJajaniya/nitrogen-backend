@@ -1,10 +1,11 @@
 import type { Request, Response } from "express";
-import { supabase } from "../supabase.js";
+import { getSupabase } from "../supabase.js";
 
 
 export const getTasks = async (req: Request, res: Response): Promise<void> => {
   const { projectId } = req.query;
   try {
+    const supabase = getSupabase();
     const numericProjectId = Number(projectId);
     const query = supabase.from("Task").select("*");
     const { data: tasksData, error: tasksError } = Number.isFinite(numericProjectId)
@@ -86,6 +87,7 @@ export const createTask = async (
     assignedUserId,
   } = req.body;
   try {
+    const supabase = getSupabase();
     const { data, error } = await supabase
       .from("Task")
       .insert([
@@ -124,6 +126,7 @@ export const updateTaskStatus = async (
   const { status } = req.body;
   const { taskId } = req.params;
   try {
+    const supabase = getSupabase();
     const { data, error } = await supabase
       .from("Task")
       .update({ status })
@@ -144,6 +147,7 @@ export const updateTaskStatus = async (
 export const getUserTasks = async (req: Request, res: Response): Promise<void> => {
   const { userId } = req.params;
   try {
+    const supabase = getSupabase();
     const numericUserId = Number(userId);
     const { data: tasksData, error: tasksError } = await supabase
       .from("Task")
