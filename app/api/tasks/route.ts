@@ -1,16 +1,10 @@
 import { getSupabaseAdmin } from "../../../lib/supabaseAdmin";
 
-export async function GET(request: Request) {
-    const { searchParams } = new URL(request.url);
-    const projectId = searchParams.get("projectId");
-
+export async function GET(_request: Request) {
     try {
         const supabaseAdmin = getSupabaseAdmin();
-        const numericProjectId = Number(projectId);
-        const query = supabaseAdmin.from("task").select("*");
-        const { data: tasksData, error: tasksError } = Number.isFinite(numericProjectId)
-            ? await query.eq("projectId", numericProjectId)
-            : await query;
+        const { data: tasksData, error: tasksError } =
+            await supabaseAdmin.from("task").select("*");
 
         if (tasksError) throw tasksError;
 
