@@ -3,7 +3,7 @@ import { getSupabaseAdmin } from "../../../lib/supabaseAdmin";
 export async function GET() {
     try {
         const supabaseAdmin = getSupabaseAdmin();
-        const { data, error } = await supabaseAdmin.from("Project").select("*");
+        const { data, error } = await supabaseAdmin.from("projects").select("*");
         if (error) throw error;
 
         const projects = data ?? [];
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
         const { name, description, startDate, endDate } = body;
 
         const { data, error } = await supabaseAdmin
-            .from("Project")
+            .from("projects")
             .insert([
                 {
                     name,

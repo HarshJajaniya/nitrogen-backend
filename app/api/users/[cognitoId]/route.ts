@@ -8,7 +8,7 @@ export async function GET(
         const supabaseAdmin = getSupabaseAdmin();
         const { cognitoId } = await params;
         const { data: user, error } = await supabaseAdmin
-            .from("User")
+            .from("users")
             .select("*")
             .eq("cognitoId", cognitoId)
             .maybeSingle();

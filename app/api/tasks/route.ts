@@ -7,7 +7,7 @@ export async function GET(request: Request) {
     try {
         const supabaseAdmin = getSupabaseAdmin();
         const numericProjectId = Number(projectId);
-        const query = supabaseAdmin.from("Task").select("*");
+        const query = supabaseAdmin.from("task").select("*");
         const { data: tasksData, error: tasksError } = Number.isFinite(numericProjectId)
             ? await query.eq("projectId", numericProjectId)
             : await query;
@@ -23,13 +23,13 @@ export async function GET(request: Request) {
         const [{ data: usersData, error: usersError }, { data: commentsData, error: commentsError }, { data: attachmentsData, error: attachmentsError }] =
             await Promise.all([
                 userIds.length
-                    ? supabaseAdmin.from("User").select("*").in("userId", userIds)
+                    ? supabaseAdmin.from("users").select("*").in("userId", userIds)
                     : Promise.resolve({ data: [], error: null }),
                 taskIds.length
-                    ? supabaseAdmin.from("Comment").select("*").in("taskId", taskIds)
+                    ? supabaseAdmin.from("comments").select("*").in("taskId", taskIds)
                     : Promise.resolve({ data: [], error: null }),
                 taskIds.length
-                    ? supabaseAdmin.from("Attachment").select("*").in("taskId", taskIds)
+                    ? supabaseAdmin.from("attachments").select("*").in("taskId", taskIds)
                     : Promise.resolve({ data: [], error: null }),
             ]);
 
@@ -90,7 +90,7 @@ export async function POST(request: Request) {
         } = body;
 
         const { data, error } = await supabaseAdmin
-            .from("Task")
+            .from("task")
             .insert([
                 {
                     title,

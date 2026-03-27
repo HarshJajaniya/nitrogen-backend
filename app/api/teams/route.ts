@@ -4,7 +4,7 @@ export async function GET() {
     try {
         const supabaseAdmin = getSupabaseAdmin();
         const { data: teamsData, error: teamsError } = await supabaseAdmin
-            .from("Team")
+            .from("teams")
             .select("*");
 
         if (teamsError) throw teamsError;
@@ -20,7 +20,7 @@ export async function GET() {
 
         const { data: usersData, error: usersError } = ownerAndManagerIds.length
             ? await supabaseAdmin
-                .from("User")
+                .from("users")
                 .select("userId,username")
                 .in("userId", ownerAndManagerIds)
             : { data: [], error: null };
