@@ -2,5 +2,8 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.disableAutomaticTypeAcquisition": true,
   "typescript.tsserver.experimental.useProjectSystem": true,
-  "prisma.pinToPrisma6": false
+  "prisma.pinToPrisma6": false,
+  "files.associations": {
+    "**/.next/trace": "plaintext"
+  }
 }
