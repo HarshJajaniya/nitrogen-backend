@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { getProjects } from "../controllers/projectController.js";
-import { createProjects } from "../controllers/projectController.js";
+import { getProjects } from "../controllers/projectController";
+import { createProjects } from "../controllers/projectController";
 
 const projectroutes = Router();
 

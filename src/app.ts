@@ -6,11 +6,11 @@ import { createRequire } from "module";
 import morgan from "morgan";
 
 /* ROUTE IMPORTS */
-import projectRoutes from "./routes/projectroutes.js";
-import taskRoutes from "./routes/tasksroutes.js";
-import searchRoutes from "./routes/seacrhroutes.js";
-import userRoutes from "./routes/userroutes.js";
-import teamRoutes from "./routes/teamroutes.js";
+import projectRoutes from "./routes/projectroutes";
+import taskRoutes from "./routes/tasksroutes";
+import searchRoutes from "./routes/seacrhroutes";
+import userRoutes from "./routes/userroutes";
+import teamRoutes from "./routes/teamroutes";
 
 dotenv.config();
 

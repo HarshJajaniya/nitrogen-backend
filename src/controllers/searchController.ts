@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { getSupabase } from "../supabase.js";
+import { getSupabase } from "../supabase";
 
 
 export const search = async (req: Request, res: Response): Promise<void> => {

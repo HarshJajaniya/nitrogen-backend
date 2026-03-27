@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { getUsers, postUser ,getUser} from "../controllers/userController.js";
+import { getUsers, postUser, getUser } from "../controllers/userController";
 
 const tasksroutes = Router();
 

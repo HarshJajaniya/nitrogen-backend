@@ -1,12 +1,12 @@
 {
-  "/api/search/route": "/api/search",
-  "/api/projects/route": "/api/projects",
   "/api/tasks/route": "/api/tasks",
   "/api/tasks/[taskId]/status/route": "/api/tasks/[taskId]/status",
-  "/api/teams/route": "/api/teams",
+  "/api/projects/route": "/api/projects",
   "/api/tasks/user/[userId]/route": "/api/tasks/user/[userId]",
+  "/api/test/supabase/route": "/api/test/supabase",
+  "/api/search/route": "/api/search",
   "/api/test/route": "/api/test",
+  "/api/teams/route": "/api/teams",
   "/api/users/[cognitoId]/route": "/api/users/[cognitoId]",
-  "/api/users/route": "/api/users",
-  "/api/test/supabase/route": "/api/test/supabase"
+  "/api/users/route": "/api/users"
 }
