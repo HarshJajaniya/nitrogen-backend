@@ -1,8 +1,11 @@
-import { prisma } from "../../../src/prisma";
+import { supabaseAdmin } from "../../../lib/supabaseAdmin";
 
 export async function GET() {
     try {
-        const projects = await prisma.project.findMany();
+        const { data, error } = await supabaseAdmin.from("Project").select("*");
+        if (error) throw error;
+
+        const projects = data ?? [];
         return Response.json(projects);
     } catch (error: any) {
         return Response.json(
@@ -17,16 +20,22 @@ export async function POST(request: Request) {
         const body = await request.json();
         const { name, description, startDate, endDate } = body;
 
-        const newProject = await prisma.project.create({
-            data: {
-                name,
-                description,
-                startDate: startDate ? new Date(startDate) : null,
-                endDate: endDate ? new Date(endDate) : null,
-            },
-        });
+        const { data, error } = await supabaseAdmin
+            .from("Project")
+            .insert([
+                {
+                    name,
+                    description,
+                    startDate: startDate ? new Date(startDate) : null,
+                    endDate: endDate ? new Date(endDate) : null,
+                },
+            ])
+            .select("*")
+            .single();
 
-        return Response.json(newProject, { status: 201 });
+        if (error) throw error;
+
+        return Response.json(data, { status: 201 });
     } catch (error: any) {
         return Response.json({ message: error.message }, { status: 500 });
     }

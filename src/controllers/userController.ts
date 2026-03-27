@@ -1,11 +1,14 @@
 import type { Request, Response } from "express";
-import { prisma } from "../prisma.js";
+import { supabase } from "../supabase.js";
 
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
   const { projectId } = req.query;
   try {
-    const users = await prisma.user.findMany();
+    const { data, error } = await supabase.from("User").select("*");
+    if (error) throw error;
+
+    const users = data ?? [];
     res.json(users);
   } catch (error: any) {
     res.status(500).json({ message: `Failed to retireve users: ${error.message}` });
@@ -23,9 +26,14 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
   }
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { cognitoId },
-    });
+    const { data: user, error } = await supabase
+      .from("User")
+      .select("*")
+      .eq("cognitoId", cognitoId)
+      .maybeSingle();
+
+    if (error) throw error;
+
     res.json(user);
   } catch (error: any) {
     res.status(500).json({ message: `Failed to retireve user: ${error.message}` });
@@ -41,18 +49,24 @@ export const postUser = async (req: Request, res: Response) => {
       teamId = 1,
     } = req.body;
 
-    const newUser = await prisma.user.create({
-      data: {
-        username,
-        cognitoId,
-        profilePictureUrl,
-        teamId,
-      },
-    });
+    const { data, error } = await supabase
+      .from("User")
+      .insert([
+        {
+          username,
+          cognitoId,
+          profilePictureUrl,
+          teamId,
+        },
+      ])
+      .select("*")
+      .single();
+
+    if (error) throw error;
 
     res.json({
       message: "User created successfully",
-      newUser,
+      newUser: data,
     });
   } catch (error: any) {
     res.status(500).json({

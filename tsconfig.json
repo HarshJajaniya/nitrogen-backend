@@ -31,7 +31,6 @@
     "app/**/*.tsx",
     "api/**/*.ts",
     "lib/**/*.ts",
-    "prisma/**/*.ts",
     "src/**/*",
     ".next/types/**/*.ts"
   ],

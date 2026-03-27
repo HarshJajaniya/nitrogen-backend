@@ -1,33 +1,32 @@
-import { prisma } from "../../../src/prisma";
+import { supabaseAdmin } from "../../../lib/supabaseAdmin";
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get("query") ?? "";
 
     try {
-        const tasks = await prisma.task.findMany({
-            where: {
-                OR: [
-                    { title: { contains: String(query) } },
-                    { description: { contains: String(query) } },
-                ],
-            },
-        });
+        const queryText = String(query).trim();
+        const pattern = `%${queryText}%`;
 
-        const projects = await prisma.project.findMany({
-            where: {
-                OR: [
-                    { name: { contains: String(query) } },
-                    { description: { contains: String(query) } },
-                ],
-            },
-        });
+        const [tasksResult, projectsResult, usersResult] = await Promise.all([
+            supabaseAdmin
+                .from("Task")
+                .select("*")
+                .or(`title.ilike.${pattern},description.ilike.${pattern}`),
+            supabaseAdmin
+                .from("Project")
+                .select("*")
+                .or(`name.ilike.${pattern},description.ilike.${pattern}`),
+            supabaseAdmin.from("User").select("*").ilike("username", pattern),
+        ]);
 
-        const users = await prisma.user.findMany({
-            where: {
-                OR: [{ username: { contains: String(query) } }],
-            },
-        });
+        if (tasksResult.error) throw tasksResult.error;
+        if (projectsResult.error) throw projectsResult.error;
+        if (usersResult.error) throw usersResult.error;
+
+        const tasks = tasksResult.data ?? [];
+        const projects = projectsResult.data ?? [];
+        const users = usersResult.data ?? [];
 
         return Response.json({ tasks, projects, users });
     } catch (error: any) {

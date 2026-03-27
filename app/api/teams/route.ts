@@ -1,37 +1,44 @@
-import { prisma } from "../../../src/prisma";
+import { supabaseAdmin } from "../../../lib/supabaseAdmin";
 
 export async function GET() {
     try {
-        const teams = await prisma.team.findMany();
+        const { data: teamsData, error: teamsError } = await supabaseAdmin
+            .from("Team")
+            .select("*");
 
-        const teamsWithUsernames = await Promise.all(
-            teams.map(async (team: any) => {
-                let productOwnerUsername = null;
-                let productManagerUsername = null;
+        if (teamsError) throw teamsError;
 
-                if (team.productOwnerUserId != null) {
-                    const productOwner = await prisma.user.findUnique({
-                        where: { userId: team.productOwnerUserId },
-                        select: { username: true },
-                    });
-                    productOwnerUsername = productOwner?.username ?? null;
-                }
+        const teams = teamsData ?? [];
+        const ownerAndManagerIds = [
+            ...new Set(
+                teams
+                    .flatMap((team: any) => [team.productOwnerUserId, team.productManagerUserId])
+                    .filter(Boolean)
+            ),
+        ];
 
-                if (team.productManagerUserId != null) {
-                    const productManager = await prisma.user.findUnique({
-                        where: { userId: team.productManagerUserId },
-                        select: { username: true },
-                    });
-                    productManagerUsername = productManager?.username ?? null;
-                }
+        const { data: usersData, error: usersError } = ownerAndManagerIds.length
+            ? await supabaseAdmin
+                .from("User")
+                .select("userId,username")
+                .in("userId", ownerAndManagerIds)
+            : { data: [], error: null };
 
-                return {
-                    ...team,
-                    productOwnerUsername,
-                    productManagerUsername,
-                };
-            })
-        );
+        if (usersError) throw usersError;
+
+        const usersById = new Map((usersData ?? []).map((user: any) => [user.userId, user.username]));
+
+        const teamsWithUsernames = teams.map((team: any) => ({
+            ...team,
+            productOwnerUsername:
+                team.productOwnerUserId != null
+                    ? usersById.get(team.productOwnerUserId) ?? null
+                    : null,
+            productManagerUsername:
+                team.productManagerUserId != null
+                    ? usersById.get(team.productManagerUserId) ?? null
+                    : null,
+        }));
 
         return Response.json(teamsWithUsernames);
     } catch (error) {

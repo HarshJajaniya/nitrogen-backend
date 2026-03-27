@@ -1,8 +1,11 @@
-import { prisma } from "../../../src/prisma";
+import { supabaseAdmin } from "../../../lib/supabaseAdmin";
 
 export async function GET() {
     try {
-        const users = await prisma.user.findMany();
+        const { data, error } = await supabaseAdmin.from("User").select("*");
+        if (error) throw error;
+
+        const users = data ?? [];
         return Response.json(users);
     } catch (error: any) {
         return Response.json(
@@ -22,18 +25,24 @@ export async function POST(request: Request) {
             teamId = 1,
         } = body;
 
-        const newUser = await prisma.user.create({
-            data: {
-                username,
-                cognitoId,
-                profilePictureUrl,
-                teamId,
-            },
-        });
+        const { data, error } = await supabaseAdmin
+            .from("User")
+            .insert([
+                {
+                    username,
+                    cognitoId,
+                    profilePictureUrl,
+                    teamId,
+                },
+            ])
+            .select("*")
+            .single();
+
+        if (error) throw error;
 
         return Response.json({
             message: "User created successfully",
-            newUser,
+            newUser: data,
         });
     } catch (error: any) {
         return Response.json(
