@@ -1,14 +1,29 @@
-import { getSupabaseAdmin } from "../../../lib/supabaseAdmin";
+import { createClient } from "@supabase/supabase-js";
 
-export async function GET(_request: Request) {
+export async function GET(request: Request) {
     try {
-        const supabaseAdmin = getSupabaseAdmin();
-        const { data: tasksData, error: tasksError } =
-            await supabaseAdmin.from("task").select("*");
+        const authHeader = request.headers.get("authorization");
+        const token = authHeader?.replace("Bearer ", "");
 
-        if (tasksError) throw tasksError;
+        const supabase = createClient(
+            process.env.SUPABASE_URL!,
+            process.env.SUPABASE_ANON_KEY!,
+            {
+                global: {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            }
+        );
 
-        const tasks = tasksData ?? [];
+        const { data, error } = await supabase
+            .from("task")
+            .select("*");
+
+        if (error) throw error;
+
+        const tasks = data ?? [];
         const taskIds = tasks.map((task: any) => task.id);
         const authorIds = [...new Set(tasks.map((task: any) => task.authorUserId).filter(Boolean))];
         const assigneeIds = [...new Set(tasks.map((task: any) => task.assignedUserId).filter(Boolean))];
@@ -17,13 +32,13 @@ export async function GET(_request: Request) {
         const [{ data: usersData, error: usersError }, { data: commentsData, error: commentsError }, { data: attachmentsData, error: attachmentsError }] =
             await Promise.all([
                 userIds.length
-                    ? supabaseAdmin.from("users").select("*").in("userId", userIds)
+                    ? supabase.from("users").select("*").in("userId", userIds)
                     : Promise.resolve({ data: [], error: null }),
                 taskIds.length
-                    ? supabaseAdmin.from("comments").select("*").in("taskId", taskIds)
+                    ? supabase.from("comments").select("*").in("taskId", taskIds)
                     : Promise.resolve({ data: [], error: null }),
                 taskIds.length
-                    ? supabaseAdmin.from("attachments").select("*").in("taskId", taskIds)
+                    ? supabase.from("attachments").select("*").in("taskId", taskIds)
                     : Promise.resolve({ data: [], error: null }),
             ]);
 
@@ -67,7 +82,21 @@ export async function GET(_request: Request) {
 
 export async function POST(request: Request) {
     try {
-        const supabaseAdmin = getSupabaseAdmin();
+        const authHeader = request.headers.get("authorization");
+        const token = authHeader?.replace("Bearer ", "");
+
+        const supabase = createClient(
+            process.env.SUPABASE_URL!,
+            process.env.SUPABASE_ANON_KEY!,
+            {
+                global: {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            }
+        );
+
         const body = await request.json();
         const {
             title,
@@ -83,7 +112,7 @@ export async function POST(request: Request) {
             assignedUserId,
         } = body;
 
-        const { data, error } = await supabaseAdmin
+        const { data, error } = await supabase
             .from("task")
             .insert([
                 {
