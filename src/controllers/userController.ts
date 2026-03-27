@@ -3,24 +3,33 @@ import { prisma } from "../prisma.js";
 
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
-    const { projectId } = req.query;
-    try {
-        const users= await prisma.user.findMany();
-        res.json(users);
-    }  catch (error: any) {
-        res.status(500).json({message: `Failed to retireve users: ${error.message}` });
-    }
+  const { projectId } = req.query;
+  try {
+    const users = await prisma.user.findMany();
+    res.json(users);
+  } catch (error: any) {
+    res.status(500).json({ message: `Failed to retireve users: ${error.message}` });
+  }
 };
 export const getUser = async (req: Request, res: Response): Promise<void> => {
-    const {cognitoId} = req.params;
-    try {
-        const user = await prisma.user.findUnique({
-            where:{cognitoId:cognitoId}
-        });
-        res.json(user);
-    }  catch (error: any) {
-        res.status(500).json({message: `Failed to retireve user: ${error.message}` });
-    }
+  const rawCognitoId = req.params.cognitoId;
+  const cognitoId = Array.isArray(rawCognitoId)
+    ? rawCognitoId[0]
+    : rawCognitoId;
+
+  if (!cognitoId) {
+    res.status(400).json({ message: "cognitoId is required" });
+    return;
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { cognitoId },
+    });
+    res.json(user);
+  } catch (error: any) {
+    res.status(500).json({ message: `Failed to retireve user: ${error.message}` });
+  }
 };
 
 export const postUser = async (req: Request, res: Response) => {
