@@ -5,6 +5,9 @@ export async function GET(request: Request) {
         const authHeader = request.headers.get("authorization");
         const token = authHeader?.replace("Bearer ", "");
 
+        const { searchParams } = new URL(request.url);
+        const projectId = searchParams.get("projectId");
+
         const supabase = createClient(
             process.env.SUPABASE_URL!,
             process.env.SUPABASE_ANON_KEY!,
@@ -17,36 +20,41 @@ export async function GET(request: Request) {
             }
         );
 
-        const { data, error } = await supabase
-            .from("task")
-            .select("*");
+        // ✅ FIX: apply filter
+        let query = supabase.from("task").select("*");
+
+        if (projectId) {
+            query = query.eq("projectId", Number(projectId));
+        }
+
+        const { data, error } = await query;
 
         if (error) throw error;
 
         const tasks = data ?? [];
+
+        // ---- rest remains same ----
+
         const taskIds = tasks.map((task: any) => task.id);
         const authorIds = [...new Set(tasks.map((task: any) => task.authorUserId).filter(Boolean))];
         const assigneeIds = [...new Set(tasks.map((task: any) => task.assignedUserId).filter(Boolean))];
         const userIds = [...new Set([...authorIds, ...assigneeIds])];
 
-        const [{ data: usersData, error: usersError }, { data: commentsData, error: commentsError }, { data: attachmentsData, error: attachmentsError }] =
+        const [{ data: usersData }, { data: commentsData }, { data: attachmentsData }] =
             await Promise.all([
                 userIds.length
                     ? supabase.from("users").select("*").in("userId", userIds)
-                    : Promise.resolve({ data: [], error: null }),
+                    : Promise.resolve({ data: [] }),
                 taskIds.length
                     ? supabase.from("comments").select("*").in("taskId", taskIds)
-                    : Promise.resolve({ data: [], error: null }),
+                    : Promise.resolve({ data: [] }),
                 taskIds.length
                     ? supabase.from("attachments").select("*").in("taskId", taskIds)
-                    : Promise.resolve({ data: [], error: null }),
+                    : Promise.resolve({ data: [] }),
             ]);
 
-        if (usersError) throw usersError;
-        if (commentsError) throw commentsError;
-        if (attachmentsError) throw attachmentsError;
-
         const usersById = new Map((usersData ?? []).map((user: any) => [user.userId, user]));
+
         const commentsByTaskId = new Map<number, any[]>();
         for (const comment of commentsData ?? []) {
             const bucket = commentsByTaskId.get(comment.taskId) ?? [];
@@ -72,9 +80,10 @@ export async function GET(request: Request) {
         }));
 
         return Response.json(hydratedTasks);
+
     } catch (error: any) {
         return Response.json(
-            { message: `Failed to retireve tasks: ${error.message}` },
+            { message: `Failed to retrieve tasks: ${error.message}` },
             { status: 500 }
         );
     }
@@ -98,6 +107,7 @@ export async function POST(request: Request) {
         );
 
         const body = await request.json();
+
         const {
             title,
             description,
@@ -112,6 +122,29 @@ export async function POST(request: Request) {
             assignedUserId,
         } = body;
 
+        // 🔥 1. VALIDATION (IMPORTANT)
+        if (!projectId) {
+            return Response.json(
+                { message: "projectId is required" },
+                { status: 400 }
+            );
+        }
+
+        // 🔥 2. CHECK PROJECT EXISTS
+        const { data: project, error: projectError } = await supabase
+            .from("project")
+            .select("id")
+            .eq("id", projectId)
+            .single();
+
+        if (projectError || !project) {
+            return Response.json(
+                { message: "Invalid projectId" },
+                { status: 400 }
+            );
+        }
+
+        // 🔥 3. CREATE TASK INSIDE PROJECT
         const { data, error } = await supabase
             .from("task")
             .insert([
@@ -124,7 +157,7 @@ export async function POST(request: Request) {
                     startDate,
                     dueDate,
                     points,
-                    projectId,
+                    projectId: Number(projectId), // ensure number
                     authorUserId,
                     assignedUserId,
                 },
@@ -135,6 +168,7 @@ export async function POST(request: Request) {
         if (error) throw error;
 
         return Response.json(data, { status: 201 });
+
     } catch (error: any) {
         return Response.json(
             { message: `Error creating a task: ${error.message}` },
