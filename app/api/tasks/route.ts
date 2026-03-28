@@ -60,6 +60,16 @@ export async function POST(request: Request) {
             }
         );
 
+        // 🔥 GET LOGGED-IN USER
+        const {
+            data: { user },
+            error: userError,
+        } = await supabase.auth.getUser();
+
+        if (userError || !user) {
+            throw new Error("User not authenticated");
+        }
+
         const body = await request.json();
 
         const {
@@ -72,7 +82,6 @@ export async function POST(request: Request) {
             dueDate,
             points,
             projectId,
-            authorUserId,
             assignedUserId,
         } = body;
 
@@ -92,9 +101,11 @@ export async function POST(request: Request) {
                     startDate,
                     dueDate,
                     points,
-                    projectId: Number(projectId), // 🔥 FIXED
-                    authorUserId,
-                    assignedUserId,
+                    projectId: Number(projectId),
+
+                    // 🔥 FIX HERE
+                    authorUserId: user.id, // ✅ ALWAYS from auth
+                    assignedUserId: assignedUserId ?? null,
                 },
             ])
             .select("*")
@@ -103,6 +114,7 @@ export async function POST(request: Request) {
         if (error) throw error;
 
         return Response.json(data, { status: 201 });
+
     } catch (error: any) {
         return Response.json(
             { message: error.message },
