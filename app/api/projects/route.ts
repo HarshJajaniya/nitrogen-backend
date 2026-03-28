@@ -1,14 +1,29 @@
 import { createClient } from "@supabase/supabase-js";
 import { getSupabaseAdmin } from "../../../lib/supabaseAdmin";
+import { auth } from "firebase-admin";
+
+
 
 export async function GET(request: Request) {
     try {
         const authHeader = request.headers.get("authorization");
         const token = authHeader?.replace("Bearer ", "");
-
+        console.log("AUTH HEADER:", authHeader);
         const { searchParams } = new URL(request.url);
         const projectId = searchParams.get("projectId");
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return Response.json(
+                { message: "Authorization header is missing" },
+                { status: 401 }
+            );
+        }
 
+        if (!token || token.split(".").length !== 3) {
+            return Response.json(
+                { message: "Invalid token format" },
+                { status: 401 }
+            );
+        }
         const supabase = createClient(
             process.env.SUPABASE_URL!,
             process.env.SUPABASE_ANON_KEY!,
@@ -20,6 +35,11 @@ export async function GET(request: Request) {
                 },
             }
         );
+
+        const {
+            data: { user },
+            error: userError,
+        } = await supabase.auth.getUser();
 
         let query = supabase.from("task").select("*");
 
