@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  npx prisma migrate dev --name uuid_user_migration  userId            String           @id // UUID from Supabase auth
+  userId            String           @id
   username          String           @unique
   email             String           @unique
   profilePictureUrl String?
