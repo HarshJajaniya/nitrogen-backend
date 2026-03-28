@@ -80,11 +80,12 @@ export async function POST(request: Request) {
             ])
             .select("*")
             .single();
-
+        console.log("CREATED PROJECT:", data);
         if (error) throw error;
 
         return Response.json(data, { status: 201 });
     } catch (error: any) {
         return Response.json({ message: error.message }, { status: 500 });
     }
+
 }
