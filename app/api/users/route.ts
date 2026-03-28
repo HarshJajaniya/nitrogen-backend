@@ -1,9 +1,23 @@
-import { getSupabaseAdmin } from "../../../lib/supabaseAdmin";
+import { createClient } from "@supabase/supabase-js";
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
-        const supabaseAdmin = getSupabaseAdmin();
-        const { data, error } = await supabaseAdmin.from("users").select("*");
+        const authHeader = request.headers.get("authorization");
+        const token = authHeader?.replace("Bearer ", "");
+
+        const supabase = createClient(
+            process.env.SUPABASE_URL!,
+            process.env.SUPABASE_ANON_KEY!,
+            {
+                global: {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            }
+        );
+
+        const { data, error } = await supabase.from("users").select("*");
         if (error) throw error;
 
         const users = data ?? [];
@@ -18,21 +32,50 @@ export async function GET() {
 
 export async function POST(request: Request) {
     try {
-        const supabaseAdmin = getSupabaseAdmin();
+        const authHeader = request.headers.get("authorization");
+        const token = authHeader?.replace("Bearer ", "");
+
+        const supabase = createClient(
+            process.env.SUPABASE_URL!,
+            process.env.SUPABASE_ANON_KEY!,
+            {
+                global: {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            }
+        );
+
+        // Get authenticated user from token
+        const {
+            data: { user },
+            error: userError,
+        } = await supabase.auth.getUser();
+
+        if (userError || !user) {
+            throw new Error("User not authenticated");
+        }
+
         const body = await request.json();
         const {
             username,
-            cognitoId,
+            email,
             profilePictureUrl = "i1.jpeg",
             teamId = 1,
         } = body;
 
-        const { data, error } = await supabaseAdmin
+        if (!username || !email) {
+            throw new Error("username and email are required");
+        }
+
+        const { data, error } = await supabase
             .from("users")
             .insert([
                 {
+                    userId: user.id, // UUID from Supabase auth
                     username,
-                    cognitoId,
+                    email,
                     profilePictureUrl,
                     teamId,
                 },

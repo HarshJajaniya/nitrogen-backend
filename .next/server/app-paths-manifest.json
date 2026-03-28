@@ -1,12 +1,12 @@
 {
-  "/api/tasks/route": "app/api/tasks/route.js",
-  "/api/search/route": "app/api/search/route.js",
-  "/api/projects/route": "app/api/projects/route.js",
   "/api/tasks/[taskId]/status/route": "app/api/tasks/[taskId]/status/route.js",
+  "/api/projects/route": "app/api/projects/route.js",
+  "/api/search/route": "app/api/search/route.js",
+  "/api/tasks/route": "app/api/tasks/route.js",
   "/api/tasks/user/[userId]/route": "app/api/tasks/user/[userId]/route.js",
   "/api/teams/route": "app/api/teams/route.js",
+  "/api/users/[userId]/route": "app/api/users/[userId]/route.js",
   "/api/test/route": "app/api/test/route.js",
-  "/api/users/[cognitoId]/route": "app/api/users/[cognitoId]/route.js",
-  "/api/test/supabase/route": "app/api/test/supabase/route.js",
-  "/api/users/route": "app/api/users/route.js"
+  "/api/users/route": "app/api/users/route.js",
+  "/api/test/supabase/route": "app/api/test/supabase/route.js"
 }

@@ -8,9 +8,9 @@ datasource db {
 }
 
 model User {
-  userId            Int              @id @default(autoincrement())
-  cognitoId         String           @unique
+  npx prisma migrate dev --name uuid_user_migration  userId            String           @id // UUID from Supabase auth
   username          String           @unique
+  email             String           @unique
   profilePictureUrl String?
   teamId            Int?
   attachments       Attachment[]
@@ -24,8 +24,8 @@ model User {
 model Team {
   id                   Int           @id @default(autoincrement())
   teamName             String
-  productOwnerUserId   Int?
-  projectManagerUserId Int?
+  productOwnerUserId   String?
+  projectManagerUserId String?
   projectTeams         ProjectTeam[]
   user                 User[]
 }
@@ -59,8 +59,8 @@ model Task {
   dueDate         DateTime?
   points          Int?
   projectId       Int
-  authorUserId    Int
-  assignedUserId  Int?
+  authorUserId    String
+  assignedUserId  String?
   attachments     Attachment[]
   comments        Comment[]
   assignee        User?            @relation("TaskAssignee", fields: [assignedUserId], references: [userId])
@@ -70,28 +70,28 @@ model Task {
 }
 
 model TaskAssignment {
-  id     Int  @id @default(autoincrement())
-  userId Int
+  id     Int    @id @default(autoincrement())
+  userId String
   taskId Int
-  task   Task @relation(fields: [taskId], references: [id])
-  user   User @relation(fields: [userId], references: [userId])
+  task   Task   @relation(fields: [taskId], references: [id])
+  user   User   @relation(fields: [userId], references: [userId])
 }
 
 model Attachment {
-  id           Int     @id @default(autoincrement())
+  id           Int    @id @default(autoincrement())
   fileURL      String
   fileName     String?
   taskId       Int
-  uploadedById Int
-  task         Task    @relation(fields: [taskId], references: [id])
-  uploadedBy   User    @relation(fields: [uploadedById], references: [userId])
+  uploadedById String
+  task         Task   @relation(fields: [taskId], references: [id])
+  uploadedBy   User   @relation(fields: [uploadedById], references: [userId])
 }
 
 model Comment {
   id     Int    @id @default(autoincrement())
   text   String
   taskId Int
-  userId Int
+  userId String
   task   Task   @relation(fields: [taskId], references: [id])
   user   User   @relation(fields: [userId], references: [userId])
 }

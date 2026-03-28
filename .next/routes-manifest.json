@@ -36,12 +36,12 @@
       "namedRegex": "^/api/tasks/(?<nxtPtaskId>[^/]+?)/status(?:/)?$"
     },
     {
-      "page": "/api/users/[cognitoId]",
+      "page": "/api/users/[userId]",
       "regex": "^/api/users/([^/]+?)(?:/)?$",
       "routeKeys": {
-        "nxtPcognitoId": "nxtPcognitoId"
+        "nxtPuserId": "nxtPuserId"
       },
-      "namedRegex": "^/api/users/(?<nxtPcognitoId>[^/]+?)(?:/)?$"
+      "namedRegex": "^/api/users/(?<nxtPuserId>[^/]+?)(?:/)?$"
     }
   ],
   "staticRoutes": [],
