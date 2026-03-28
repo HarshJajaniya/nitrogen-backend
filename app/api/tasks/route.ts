@@ -82,6 +82,7 @@ export async function POST(request: Request) {
             dueDate,
             points,
             projectId,
+            assignedUserId,
         } = body;
 
         if (!projectId) {
@@ -102,9 +103,8 @@ export async function POST(request: Request) {
                     points,
                     projectId: Number(projectId),
 
-                    // 🔥 FIX HERE
-                    authorUserId: user.id, // ✅ ALWAYS from auth
-                    assignedUserId: null, // for now
+                    authorUserId: user.id,              // creator
+                    assignedUserId: assignedUserId || null, // selected user
                 },
             ])
             .select("*")
