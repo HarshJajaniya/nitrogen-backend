@@ -1,16 +1,42 @@
+import { createClient } from "@supabase/supabase-js";
 import { getSupabaseAdmin } from "../../../lib/supabaseAdmin";
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
-        const supabaseAdmin = getSupabaseAdmin();
-        const { data, error } = await supabaseAdmin.from("projects").select("*");
+        const authHeader = request.headers.get("authorization");
+        const token = authHeader?.replace("Bearer ", "");
+
+        const { searchParams } = new URL(request.url);
+        const projectId = searchParams.get("projectId");
+
+        const supabase = createClient(
+            process.env.SUPABASE_URL!,
+            process.env.SUPABASE_ANON_KEY!,
+            {
+                global: {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            }
+        );
+
+        let query = supabase.from("task").select("*");
+
+        // 🔥 CRITICAL FILTER
+        if (projectId) {
+            query = query.eq("projectId", Number(projectId));
+        }
+
+        const { data, error } = await query;
+
         if (error) throw error;
 
-        const projects = data ?? [];
-        return Response.json(projects);
+        return Response.json(data ?? []);
+
     } catch (error: any) {
         return Response.json(
-            { message: `Failed to retireve project: ${error.message}` },
+            { message: `Failed to retrieve tasks: ${error.message}` },
             { status: 500 }
         );
     }
