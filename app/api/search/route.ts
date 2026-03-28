@@ -11,14 +11,14 @@ export async function GET(request: Request) {
 
         const [tasksResult, projectsResult, usersResult] = await Promise.all([
             supabaseAdmin
-                .from("task")
+                .from("Task")
                 .select("*")
                 .or(`title.ilike.${pattern},description.ilike.${pattern}`),
             supabaseAdmin
-                .from("projects")
+                .from("Project")
                 .select("*")
                 .or(`name.ilike.${pattern},description.ilike.${pattern}`),
-            supabaseAdmin.from("users").select("*").ilike("username", pattern),
+            supabaseAdmin.from("User").select("*").ilike("username", pattern),
         ]);
 
         if (tasksResult.error) throw tasksResult.error;

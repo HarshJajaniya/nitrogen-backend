@@ -1,0 +1,12 @@
+{
+  "/api/projects/route": "/api/projects",
+  "/api/tasks/[taskId]/status/route": "/api/tasks/[taskId]/status",
+  "/api/search/route": "/api/search",
+  "/api/tasks/user/[userId]/route": "/api/tasks/user/[userId]",
+  "/api/teams/route": "/api/teams",
+  "/api/test/route": "/api/test",
+  "/api/users/[userId]/route": "/api/users/[userId]",
+  "/api/test/supabase/route": "/api/test/supabase",
+  "/api/tasks/route": "/api/tasks",
+  "/api/users/route": "/api/users"
+}

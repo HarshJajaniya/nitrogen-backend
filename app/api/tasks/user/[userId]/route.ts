@@ -9,7 +9,7 @@ export async function GET(
         const { userId } = await params;
         const numericUserId = Number(userId);
         const { data: tasksData, error: tasksError } = await supabaseAdmin
-            .from("task")
+            .from("Task")
             .select("*")
             .or(`authorUserId.eq.${numericUserId},assignedUserId.eq.${numericUserId}`);
 
@@ -21,7 +21,7 @@ export async function GET(
         const userIds = [...new Set([...authorIds, ...assigneeIds])];
 
         const { data: usersData, error: usersError } = userIds.length
-            ? await supabaseAdmin.from("users").select("*").in("userId", userIds)
+            ? await supabaseAdmin.from("User").select("*").in("userId", userIds)
             : { data: [], error: null };
 
         if (usersError) throw usersError;

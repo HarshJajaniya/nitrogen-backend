@@ -28,7 +28,7 @@ export async function GET(request: Request) {
         );
 
         const { data, error } = await supabase
-            .from("task")
+            .from("Task")
             .select("*")
             .eq("projectId", Number(projectId)); // 🔥 MUST
 
@@ -90,7 +90,7 @@ export async function POST(request: Request) {
         }
 
         const { data, error } = await supabase
-            .from("task")
+            .from("Task")
             .insert([
                 {
                     title,

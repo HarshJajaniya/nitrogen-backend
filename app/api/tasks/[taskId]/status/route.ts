@@ -11,7 +11,7 @@ export async function PATCH(
         const { status } = body;
 
         const { data: updateTask, error } = await supabaseAdmin
-            .from("task")
+            .from("Task")
             .update({ status })
             .eq("id", Number(taskId))
             .select("*")

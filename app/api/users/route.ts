@@ -17,7 +17,7 @@ export async function GET(request: Request) {
             }
         );
 
-        const { data, error } = await supabase.from("users").select("*");
+        const { data, error } = await supabase.from("User").select("*");
         if (error) throw error;
 
         const users = data ?? [];
@@ -70,7 +70,7 @@ export async function POST(request: Request) {
         }
 
         const { data, error } = await supabase
-            .from("users")
+            .from("User")
             .insert([
                 {
                     userId: user.id, // UUID from Supabase auth

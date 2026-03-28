@@ -41,7 +41,7 @@ export async function GET(request: Request) {
             error: userError,
         } = await supabase.auth.getUser();
 
-        let query = supabase.from("task").select("*");
+        let query = supabase.from("Task").select("*");
 
         // 🔥 CRITICAL FILTER
         if (projectId) {
@@ -69,7 +69,7 @@ export async function POST(request: Request) {
         const { name, description, startDate, endDate } = body;
 
         const { data, error } = await supabaseAdmin
-            .from("projects")
+            .from("Project")
             .insert([
                 {
                     name,

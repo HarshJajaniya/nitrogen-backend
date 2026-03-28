@@ -22,7 +22,7 @@ export async function GET(
 
         const { userId } = await params;
         const { data: user, error } = await supabase
-            .from("users")
+            .from("User")
             .select("*")
             .eq("userId", userId)
             .maybeSingle();
