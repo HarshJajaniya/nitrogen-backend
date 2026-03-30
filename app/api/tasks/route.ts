@@ -34,7 +34,12 @@ export async function GET(request: Request) {
 
         if (error) throw error;
 
-        return Response.json(data ?? []);
+        // Ensure priority is always uppercase in the response
+        const normalized = (data ?? []).map((task: any) => ({
+            ...task,
+            priority: task.priority ? String(task.priority).toUpperCase() : task.priority,
+        }));
+        return Response.json(normalized);
     } catch (error: any) {
         return Response.json(
             { message: error.message },
@@ -112,7 +117,12 @@ export async function POST(request: Request) {
 
         if (error) throw error;
 
-        return Response.json(data, { status: 201 });
+        // Ensure priority is always uppercase in the response
+        const normalized = data ? {
+            ...data,
+            priority: data.priority ? String(data.priority).toUpperCase() : data.priority,
+        } : data;
+        return Response.json(normalized, { status: 201 });
 
     } catch (error: any) {
         return Response.json(
