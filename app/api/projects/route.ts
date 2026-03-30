@@ -41,7 +41,7 @@ export async function GET(request: Request) {
             error: userError,
         } = await supabase.auth.getUser();
 
-        let query = supabase.from("Task").select("*");
+        let query = supabase.from("Project").select("*");
 
         // 🔥 CRITICAL FILTER
         if (projectId) {
